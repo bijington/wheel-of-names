@@ -1,20 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:wheelOfNames="clr-namespace:WheelOfNames"
              x:Class="WheelOfNames.MainPage"
+             x:DataType="wheelOfNames:MainPageViewModel"
              Shell.NavBarIsVisible="False">
 
     <Grid ColumnDefinitions="5*,*">
-        <GraphicsView 
-            x:Name="WheelView"
-            StartInteraction="Wheel_OnStartInteraction" />
+        <wheelOfNames:WheelView
+            x:Name="Wheel"
+            ItemsSource="{Binding Names}"
+            NameSelectedCommand="{Binding NameSelectedCommand}"
+            NameSelected="Wheel_OnNameSelected">
+            <wheelOfNames:WheelView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding SpinCommand, Source={x:Reference Wheel}}" />
+            </wheelOfNames:WheelView.GestureRecognizers>
+        </wheelOfNames:WheelView>
         
         <Border Grid.Column="1">
             <Grid RowDefinitions="Auto,*">
                 <Label Text="Names" />
                 <Editor
                     Grid.Row="1"
-                    TextChanged="NamesEditor_OnTextChanged" />
+                    Text="{Binding NameText}" />
             </Grid>
         </Border>
     </Grid>
